@@ -24,7 +24,7 @@ if connt == PASSWORD:
                      FILES TEXT NOT NULL);''') # Creating the safe database
         print("Your safe has been created now!!")
     except:
-        print("Your safe is already created1 what would you like to do? ") # since its already created 
+        print("Your safe is already created! what would you like to do? ") # since its already created 
         
     while True:
         print("\n"+ "*"*15)
@@ -42,7 +42,7 @@ if connt == PASSWORD:
             #open the required file
             file_name=input("Enter your file name please : \n")
             file_type=input("Enter the extension type of your file: \n")
-            FILE_=filename +"."+ file_type #format of the file
+            FILE_=file_name +"."+ file_type #format of the file
             cursor=conn.execute("SELECT * FROM SAFE WHERE FULL_NAME=" + '"' + FILE_ + '"' )
             file_string=""
             for row in cursor:
@@ -65,11 +65,11 @@ if connt == PASSWORD:
             }
             
             file_name=PATH.split('/') # splits the path by / and stores in a tuple
-            file_name=file_name[len(file_name)-1]
+            file_name=str(file_name[len(file_name)-1])
             file_string=""
             
-            NAME=file_name.split(".")[0]
-            EXTENSION=file_name.split(".")[1]
+            NAME=str(file_name.split(".")[0])
+            EXTENSION=str(file_name.split(".")[1])
             
             try:
                 EXTENSION=FILE_TYPES[EXTENSION]
@@ -83,11 +83,12 @@ if connt == PASSWORD:
                 
             elif EXTENSION=="TEXT":
                 file_string=open(PATH,'r').read()      
-                file_string=base64.b64encode(file_string)
+                file_string=str(base64.b64encode(file_string))
                 
-            EXTENSION=file_name.split(".")
+            EXTENSION=str(file_name.split("."))
             
-            command='INSER INTO SAFE (FULL_NAME,NAME,EXTENSION,FILES) VALUES (%S,%S,%S,%S);' %('"' + file_name +'"', '"' + NAME +'"', '"' + EXTENSION +'"', '"' + file_string +'"')
+            command='INSERT INTO SAFE(FULL_NAME,NAME,EXTENSION,FILES) VALUES (%s,%s,%s,%s);'%('"' + file_name +'"', '"' + NAME +'"', '"' + EXTENSION +'"', '"' + file_string +'"')
+            
             conn.execute(command)
             conn.commit()
             
